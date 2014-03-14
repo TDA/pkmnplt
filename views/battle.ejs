@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title></title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="description" content="Battle System">
+<meta name="keywords" content="Pokemon,Battle">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+
+<link rel="icon" type="image/png" href="favicon.png">
+
+<!--[if lt IE 9]>  
+<script src="html5shiv.js"></script> 
+<script src="respond.min.js" type="text/javascript"></script>
+<script src="selectivizr-min.js" type="text/javascript"></script>
+ 
+<![endif]--> 
+
+<link rel="stylesheet" href="normalize.css">
+<link rel="stylesheet" href="sitewide.css">
+</head>
+
+
+<body>
+
+<section id="container">
+<header>
+	<h2>The Plateau</h2>
+
+	<nav>
+	<ul>
+	<li><a href="/rend">Home</a></li>
+	</ul>
+	</nav>
+</header>
+
+<div id="battlescreen">
+<form method="post" action="">
+
+<div class="pkmnholder" id="mypkmn">
+<span></span><br>
+<figure id="mypkmnimage">
+<br><img></figure>
+HP:
+<span class="hp" id="hp1">
+400
+</span>
+<br>
+
+
+
+
+
+</div>
+
+<div class="pkmnholder" id="comppkmn">
+<span></span><br>
+<figure id="comppkmnimage">
+
+<br><img>
+</figure>
+HP:
+<span class="hp" name="hp" id="hp2"> 
+400
+</span>
+<ol>
+
+
+</ol>
+</div>
+
+<output id="damage">
+</output>
+
+<input type='submit' value='Attack' name='submit' id='submit'></form>
+</div>
+
+<footer>
+&copy;2009-2013 Pokemon Plateau. All Rights Reserved.
+</footer>
+</section>
+
+
+<script>window.jQuery || document.write('<script src="jquery.js"><\/script>')</script>
+
+	<script type='text/javascript'>
+	$('document').ready(function(){
+	var ypk =<%-JSON.stringify(ypk)%>
+    var opk =<%-JSON.stringify(opk)%>
+	
+	var ypk_array=ypk.split(',');
+	var opk_array=opk.split(',');
+	
+	var yname=ypk_array[1];
+	var oname=opk_array[1];
+	var ypkimg=ypk_array[2];
+	var opkimg=opk_array[2];
+	var mytype_1=ypk_array[3];
+	var mytype_2=ypk_array[4]||'none';
+	var optype_1=opk_array[3];
+	var optype_2=opk_array[4]||'none';
+	var atkval=1,compatkval=1;  
+	var myatktype,cpatktype;
+	
+	//alert(mytype_1+mytype_2+optype_1+optype_2);
+	
+	var my_atk_array={
+		'atk_1':{
+		'name':ypk_array[10],
+		'power':ypk_array[10+1],
+		'type':ypk_array[10+2]
+		},
+		
+		'atk_2':{
+		'name':ypk_array[14],
+		'power':ypk_array[14+1],
+		'type':ypk_array[14+2]
+		},
+		
+		'atk_3':{
+		'name':ypk_array[18],
+		'power':ypk_array[18+1],
+		'type':ypk_array[18+2]
+		},
+		
+		'atk_4':{
+		'name':ypk_array[22],
+		'power':ypk_array[22+1],
+		'type':ypk_array[22+2]
+		}
+		
+		
+	};
+	
+	
+	var cp_atk_array={
+		'atk_1':{
+		'name':opk_array[10],
+		'power':opk_array[10+1],
+		'type':opk_array[10+2]
+		},
+		
+		'atk_2':{
+		'name':opk_array[14],
+		'power':opk_array[14+1],
+		'type':opk_array[14+2]
+		},
+		
+		'atk_3':{
+		'name':opk_array[18],
+		'power':opk_array[18+1],
+		'type':opk_array[18+2]
+		},
+		
+		'atk_4':{
+		'name':opk_array[22],
+		'power':opk_array[22+1],
+		'type':opk_array[22+2]
+		}
+		
+		
+	};
+	
+	
+	  
+$('#mypkmnimage img').attr('src','Images/'+ypkimg);
+$('#comppkmnimage img').attr('src','Images/'+opkimg);
+
+for(i=1;i<=4;i++)
+$('#mypkmn').append('<input type=radio name=atk value='+i+'>'+my_atk_array['atk_'+i]['name']+'<br>')
+
+for(i=1;i<=4;i++)
+$('#comppkmn ol').append('<li>'+cp_atk_array['atk_'+i]['name']+'<br>')
+
+$('#mypkmn span:first-child').append(yname);
+$('#comppkmn span:first-child').append(oname);
+
+
+	
+	$('#mypkmn input[type=radio]').change(function(){
+	atkval=$('#mypkmn input[type=radio]:checked').val();
+	
+	myatktype=my_atk_array['atk_'+atkval]['type'];
+	
+	my_atk_name=my_atk_array['atk_'+atkval]['name'];
+	
+	my_atk_pow=my_atk_array['atk_'+atkval]['power'];
+	
+	
+	//alert(my_atk_pow+','+cp_atk_pow);
+	});
+
+
+
+
+
+
+$('#submit').click(function(){
+//alert(myatktype+cpatktype+mytype_1+mytype_2+' OP:  '+optype_1+' op2'+optype_2);
+
+compatkval=Math.ceil(Math.random()*4);
+cpatktype=cp_atk_array['atk_'+compatkval]['type'];
+cp_atk_name=cp_atk_array['atk_'+compatkval]['name'];
+cp_atk_pow=cp_atk_array['atk_'+compatkval]['power'];
+
+var ko=0;
+$.ajax({
+type:'get',
+url:'/calc',
+dataType:'text',
+data:{
+		'myatk':myatktype,
+		'opatk':cpatktype,
+		'mtype1':mytype_1,
+		'mtype2':mytype_2,
+		'ctype1':optype_1,
+		'ctype2':optype_2
+		
+	}
+
+}).done(function(multipliers){
+	
+	$('#damage').html('');
+	m=multipliers.split(',');
+	
+	var hp1=$('#hp1').text();
+	var hp2=$('#hp2').text();
+	//alert(hp1);
+	var myfinaldmg=m[0]*my_atk_pow;
+	var cpfinaldmg=m[1]*cp_atk_pow;
+	//alert(myfinaldmg+','+cpfinaldmg);
+	hp2-=Math.floor(myfinaldmg);
+	hp1-=Math.floor(cpfinaldmg);
+	my_eff=m[2];
+	cp_eff=m[3];
+	
+	if(hp1>0)
+	{
+	$('#hp1').text(hp1);
+	$('#damage').append("<div class='damageres'>"+yname+" has "+hp1+" HP left</div>");
+	}
+	else
+	{
+	$('#hp1').text(0);
+	$('#damage').append("<div class='damageres'>"+yname+" got knocked out</div>");
+	ko=1;
+	}
+	
+	if(hp2>0)
+	{
+	$('#hp2').text(hp2);
+	$('#damage').append("<div class='damageres'>"+oname+" has "+hp2+" HP left</div>");
+	}
+	else
+	{
+	$('#hp2').text(0);
+	$('#damage').append("<div class='damageres'>"+oname+" got knocked out</div>");
+	ko=1;
+	}
+	
+	$('#damage').append("<div class='damageres'>Opponents "+oname+" used "+cp_atk_name+" and did "+Math.floor(cpfinaldmg)+" It is "+cp_eff+"</div>");
+
+	$('#damage').append("<div class='damageres'>Your "+yname+" used "+my_atk_name+" and did "+Math.floor(myfinaldmg)+" It is "+my_eff+"</div>");
+
+	
+	if(ko==1)
+	{
+		$('#battlescreen').append("<div class='alert'>Battle Over<br></div>");
+		$('.alert').append(hp1>=hp2?"You won<br>":"You lost<br>");
+		$('.alert').append("<a href='/'>Go back and start new battle</a>");
+		$('#submit').hide();
+	}
+});
+return false;
+});
+
+
+
+
+
+
+
+
+
+
+
+});	  
+
+
+
+</script>
+
+</body>
+</html>
